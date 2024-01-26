@@ -1,5 +1,6 @@
 <script setup>
   import {ref} from 'vue'
+  const emit = defineEmits(['thrown-dices'])
 
   const dices = ref()
   const diceImg = [
@@ -17,6 +18,7 @@
       let die = Math.floor(Math.random() * 6) + 1
       dices.value.push(die)
     }
+    emit('thrown-dices', dices.value)
   }
 </script>
 
