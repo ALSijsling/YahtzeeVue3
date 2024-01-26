@@ -13,7 +13,6 @@
 </script>
 
 <template>
-  <p>{{ thrownDices }}</p>
   <div class="flex justify-center">
     <img src="./assets/logo.png" class="h-16" alt="Yahtzee Logo" />
     <h1 class="text-5xl font-bold text-center text-sky-800">{{header}}</h1>
