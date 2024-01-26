@@ -4,7 +4,6 @@
   import ScoreTable from './components/ScoreTable.vue'
 
   const header = ref("Yahtzee")
-
   const thrownDices = ref()
 
   const dices = (die)=>{
@@ -20,5 +19,5 @@
 
   <ThrownDices @thrown-dices="dices" />
 
-  <ScoreTable />
+  <ScoreTable :thrown-dices="thrownDices" />
 </template>

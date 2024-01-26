@@ -1,9 +1,12 @@
 <script setup>
-  import {ref} from 'vue'
+  import {computed, ref} from 'vue'
   import TableData from './TableData.vue'
   import TableHead from './TableHead.vue'
   import TableRow from './TableRow.vue'
   import TableRowSpan from './TableRowSpan.vue'
+  const props = defineProps(['thrownDices'])
+
+  const dices = computed(()=> props.thrownDices)
 </script>
 
 <template>
