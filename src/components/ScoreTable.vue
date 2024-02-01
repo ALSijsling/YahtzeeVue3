@@ -26,6 +26,9 @@
     return countObj
   })
 
+  const numScoreTotal = computed(()=> props.thrownDices.reduce((acc,item) => acc = acc+item, 0))
+
+  const bonusScore = computed(()=> numScoreTotal.value > 63 ? 35 : 0)
 </script>
 
 <template>
@@ -132,7 +135,7 @@
             <i class='fas fa-arrow-right' style="font-size:24px"></i>
           </div>
         </TableData>
-        <TableData></TableData>
+        <TableData>{{ numScoreTotal }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -146,7 +149,7 @@
           </div>
         </TableData>
         <TableData>35 Points</TableData>
-        <TableData></TableData>
+        <TableData>{{ bonusScore }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -159,7 +162,7 @@
             <i class='fas fa-arrow-right' style="font-size:24px"></i>
           </div>
         </TableData>
-        <TableData></TableData>
+        <TableData>{{ numScoreTotal + bonusScore }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
