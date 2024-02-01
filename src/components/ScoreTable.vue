@@ -4,9 +4,28 @@
   import TableHead from './TableHead.vue'
   import TableRow from './TableRow.vue'
   import TableRowSpan from './TableRowSpan.vue'
+
   const props = defineProps(['thrownDices'])
 
-  const dices = computed(()=> props.thrownDices)
+  // const dices = computed(()=> props.thrownDices)
+
+  const count = computed(()=> {
+    let countObj = {
+      1:0,
+      2:0,
+      3:0,
+      4:0,
+      5:0,
+      6:0
+    }
+
+    props.thrownDices.forEach(die => {
+      countObj[die]++
+    })
+    
+    return countObj
+  })
+
 </script>
 
 <template>
@@ -30,7 +49,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Aces</TableData>
-        <TableData></TableData>
+        <TableData>{{ count[1] }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -44,7 +63,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Twos</TableData>
-        <TableData></TableData>
+        <TableData>{{ count[2]*2 }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -58,7 +77,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Threes</TableData>
-        <TableData></TableData>
+        <TableData>{{ count[3]*3 }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -72,7 +91,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Fours</TableData>
-        <TableData></TableData>
+        <TableData>{{ count[4]*4 }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -86,7 +105,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Fives</TableData>
-        <TableData></TableData>
+        <TableData>{{ count[5]*5 }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -100,7 +119,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Sixes</TableData>
-        <TableData></TableData>
+        <TableData>{{ count[6]*6 }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -126,7 +145,7 @@
             <p class="text-xs text-center">if more than<br> 63 points</p>
           </div>
         </TableData>
-        <TableData>Total Score of Sixes</TableData>
+        <TableData>35 Points</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>

@@ -4,7 +4,7 @@
   import ScoreTable from './components/ScoreTable.vue'
 
   const header = ref("Yahtzee")
-  const thrownDices = ref()
+  const thrownDices = ref([])
 
   const dices = (die)=>{
     thrownDices.value = die
