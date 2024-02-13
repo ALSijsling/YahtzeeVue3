@@ -7,7 +7,7 @@
 
   const props = defineProps(['thrownDices'])
 
-  // const dices = computed(()=> props.thrownDices)
+  const dices = computed(()=> props.thrownDices)
 
   const count = computed(()=> {
     let countObj = {
@@ -26,9 +26,36 @@
     return countObj
   })
 
-  const numScoreTotal = computed(()=> props.thrownDices.reduce((acc,item) => acc = acc+item, 0))
 
+  const countDuplicates = (num) => {
+    if(count.value[1]==num || count.value[2]==num || count.value[3]==num || count.value[4]==num || count.value[5]==num || count.value[6]==num)
+    return true
+  }
+
+  const numScoreTotal = computed(()=> props.thrownDices.reduce((acc,item) => acc = acc+item, 0))
   const bonusScore = computed(()=> numScoreTotal.value > 63 ? 35 : 0)
+  const bottomScore = computed(()=> (chance.value + threeKind.value + fourKind.value + yahtzee.value + fullHouse.value + smallStraight.value + largeStraight.value))
+
+  // bottomscores
+  const chance = computed(()=> props.thrownDices.reduce((total, value) => total + value, 0))
+  const threeKind = computed(()=> (countDuplicates(3) || countDuplicates(4) || countDuplicates(5)) ? chance.value : 0)
+  const fourKind = computed(()=> countDuplicates(4) || countDuplicates(5) ? chance.value : 0)
+  const yahtzee = computed(()=> countDuplicates(5) ? chance.value : 0)
+  const fullHouse = computed(()=> (countDuplicates(2) && countDuplicates(3)) ? 25 : 0)
+  
+  const smallStraight = computed(()=> {
+    dices.value.sort()
+    if (/1234|2345|3456/.test(dices.value.join("").replace(/(.)\1/,"$1")))
+    return 30
+    else return 0
+  })
+
+  const largeStraight = computed(()=> {
+    dices.value.sort()
+    if (/12345|23456/.test(dices.value.join("")))
+    return 40
+    else return 0
+  })
 </script>
 
 <template>
@@ -158,7 +185,7 @@
       <TableRowSpan>
         <TableData colspan="2">
           <div class="flex justify-between">
-            <p>Total Points Of Part One</p>
+            <p>Total Points of Part One</p>
             <i class='fas fa-arrow-right' style="font-size:24px"></i>
           </div>
         </TableData>
@@ -180,7 +207,7 @@
       <TableRow>
         <TableData class="w-3/12">Three of a Kind</TableData>
         <TableData class="w-2/12">Total of Dice</TableData>
-        <TableData class="w-1/12"></TableData>
+        <TableData class="w-1/12">{{ threeKind }}</TableData>
         <TableData class="w-1/12"></TableData>
         <TableData class="w-1/12"></TableData>
         <TableData class="w-1/12"></TableData>
@@ -189,7 +216,7 @@
       <TableRow>
         <TableData>Four of a Kind</TableData>
         <TableData>Total of Dice</TableData>
-        <TableData></TableData>
+        <TableData>{{ fourKind }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -198,7 +225,7 @@
       <TableRow>
         <TableData>Full House</TableData>
         <TableData>25 Points</TableData>
-        <TableData></TableData>
+        <TableData>{{ fullHouse }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -212,7 +239,7 @@
           </div>
         </TableData>
         <TableData>30 Points</TableData>
-        <TableData></TableData>
+        <TableData>{{ smallStraight }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -226,7 +253,7 @@
           </div>
         </TableData>
         <TableData>40 Points</TableData>
-        <TableData></TableData>
+        <TableData>{{ largeStraight }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -240,7 +267,7 @@
           </div>
         </TableData>
         <TableData>50 Points</TableData>
-        <TableData></TableData>
+        <TableData>{{ yahtzee }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -249,7 +276,7 @@
       <TableRow>
         <TableData>Chance</TableData>
         <TableData>Total of Dice</TableData>
-        <TableData></TableData>
+        <TableData>{{ chance }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -262,7 +289,7 @@
             <i class='fas fa-arrow-right' style="font-size:24px"></i>
           </div>
         </TableData>
-        <TableData></TableData>
+        <TableData>{{ bottomScore }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -275,7 +302,7 @@
             <i class='fas fa-arrow-right' style="font-size:24px"></i>
           </div>
         </TableData>
-        <TableData></TableData>
+        <TableData>{{ numScoreTotal + bonusScore }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -288,7 +315,7 @@
             <i class='fas fa-arrow-right' style="font-size:24px"></i>
           </div>
         </TableData>
-        <TableData></TableData>
+        <TableData>{{ numScoreTotal + bonusScore + bottomScore}}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
