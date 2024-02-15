@@ -1,61 +1,94 @@
 <script setup>
-  import {computed, ref} from 'vue'
-  import TableData from './TableData.vue'
-  import TableHead from './TableHead.vue'
-  import TableRow from './TableRow.vue'
-  import TableRowSpan from './TableRowSpan.vue'
+import { computed, ref } from "vue";
+import TableData from "./TableData.vue";
+import TableHead from "./TableHead.vue";
+import TableRow from "./TableRow.vue";
+import TableRowSpan from "./TableRowSpan.vue";
 
-  const props = defineProps(['thrownDices'])
+const props = defineProps(["thrownDices"]);
 
-  const dices = computed(()=> props.thrownDices)
+// TODO: props hoeven niet in een computed property?
+const dices = computed(() => props.thrownDices);
 
-  const count = computed(()=> {
-    let countObj = {
-      1:0,
-      2:0,
-      3:0,
-      4:0,
-      5:0,
-      6:0
-    }
+const count = computed(() => {
+  let countObj = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+  };
 
-    props.thrownDices.forEach(die => {
-      countObj[die]++
-    })
-    
-    return countObj
-  })
+  props.thrownDices.forEach((die) => {
+    countObj[die]++;
+  });
 
+  return countObj;
+});
 
-  const countDuplicates = (num) => {
-    if(count.value[1]==num || count.value[2]==num || count.value[3]==num || count.value[4]==num || count.value[5]==num || count.value[6]==num)
-    return true
-  }
+const countDuplicates = (num) => {
+  // TODO: deze functie kan korter. Refactor naar kortere functie. Hint: maak gebruik van
+  // Object.values()
+  if (
+    count.value[1] == num ||
+    count.value[2] == num ||
+    count.value[3] == num ||
+    count.value[4] == num ||
+    count.value[5] == num ||
+    count.value[6] == num
+  )
+    return true;
+};
 
-  const numScoreTotal = computed(()=> props.thrownDices.reduce((acc,item) => acc = acc+item, 0))
-  const bonusScore = computed(()=> numScoreTotal.value > 63 ? 35 : 0)
-  const bottomScore = computed(()=> (chance.value + threeKind.value + fourKind.value + yahtzee.value + fullHouse.value + smallStraight.value + largeStraight.value))
+const numScoreTotal = computed(() =>
+  props.thrownDices.reduce((acc, item) => (acc = acc + item), 0)
+);
+const bonusScore = computed(() => (numScoreTotal.value > 63 ? 35 : 0));
 
-  // bottomscores
-  const chance = computed(()=> props.thrownDices.reduce((total, value) => total + value, 0))
-  const threeKind = computed(()=> (countDuplicates(3) || countDuplicates(4) || countDuplicates(5)) ? chance.value : 0)
-  const fourKind = computed(()=> countDuplicates(4) || countDuplicates(5) ? chance.value : 0)
-  const yahtzee = computed(()=> countDuplicates(5) ? chance.value : 0)
-  const fullHouse = computed(()=> (countDuplicates(2) && countDuplicates(3)) ? 25 : 0)
-  
-  const smallStraight = computed(()=> {
-    dices.value.sort()
-    if (/1234|2345|3456/.test(dices.value.join("").replace(/(.)\1/,"$1")))
-    return 30
-    else return 0
-  })
+// TODO: extra opdracht voor als je nog zin hebt: zet alle losse score-computed properties in 1 object
+// als losse object properties, en maak dit ene object als computed property, voor een betere organisatie
+// van je code. Dus: scores.chance, ipv change...
+const bottomScore = computed(
+  () =>
+    chance.value +
+    threeKind.value +
+    fourKind.value +
+    yahtzee.value +
+    fullHouse.value +
+    smallStraight.value +
+    largeStraight.value
+);
 
-  const largeStraight = computed(()=> {
-    dices.value.sort()
-    if (/12345|23456/.test(dices.value.join("")))
-    return 40
-    else return 0
-  })
+// bottomscores
+const chance = computed(() =>
+  props.thrownDices.reduce((total, value) => total + value, 0)
+);
+const threeKind = computed(() =>
+  countDuplicates(3) || countDuplicates(4) || countDuplicates(5)
+    ? chance.value
+    : 0
+);
+const fourKind = computed(() =>
+  countDuplicates(4) || countDuplicates(5) ? chance.value : 0
+);
+const yahtzee = computed(() => (countDuplicates(5) ? chance.value : 0));
+const fullHouse = computed(() =>
+  countDuplicates(2) && countDuplicates(3) ? 25 : 0
+);
+
+const smallStraight = computed(() => {
+  dices.value.sort();
+  if (/1234|2345|3456/.test(dices.value.join("").replace(/(.)\1/, "$1")))
+    return 30;
+  else return 0;
+});
+
+const largeStraight = computed(() => {
+  dices.value.sort();
+  if (/12345|23456/.test(dices.value.join(""))) return 40;
+  else return 0;
+});
 </script>
 
 <template>
@@ -93,7 +126,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Twos</TableData>
-        <TableData>{{ count[2]*2 }}</TableData>
+        <TableData>{{ count[2] * 2 }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -107,7 +140,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Threes</TableData>
-        <TableData>{{ count[3]*3 }}</TableData>
+        <TableData>{{ count[3] * 3 }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -121,7 +154,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Fours</TableData>
-        <TableData>{{ count[4]*4 }}</TableData>
+        <TableData>{{ count[4] * 4 }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -135,7 +168,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Fives</TableData>
-        <TableData>{{ count[5]*5 }}</TableData>
+        <TableData>{{ count[5] * 5 }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -149,7 +182,7 @@
           </div>
         </TableData>
         <TableData>Total Score of Sixes</TableData>
-        <TableData>{{ count[6]*6 }}</TableData>
+        <TableData>{{ count[6] * 6 }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
@@ -159,7 +192,7 @@
         <TableData colspan="2">
           <div class="flex justify-between">
             <p>Total Points</p>
-            <i class='fas fa-arrow-right' style="font-size:24px"></i>
+            <i class="fas fa-arrow-right" style="font-size: 24px"></i>
           </div>
         </TableData>
         <TableData>{{ numScoreTotal }}</TableData>
@@ -172,7 +205,10 @@
         <TableData>
           <div class="flex justify-between">
             <p>Bonus</p>
-            <p class="text-xs text-center">if more than<br> 63 points</p>
+            <p class="text-xs text-center">
+              if more than<br />
+              63 points
+            </p>
           </div>
         </TableData>
         <TableData>35 Points</TableData>
@@ -186,7 +222,7 @@
         <TableData colspan="2">
           <div class="flex justify-between">
             <p>Total Points of Part One</p>
-            <i class='fas fa-arrow-right' style="font-size:24px"></i>
+            <i class="fas fa-arrow-right" style="font-size: 24px"></i>
           </div>
         </TableData>
         <TableData>{{ numScoreTotal + bonusScore }}</TableData>
@@ -235,7 +271,7 @@
         <TableData>
           <div class="flex justify-between">
             <p>Small Straight</p>
-            <p class="text-xs text-center">Sequence<br>of 4 dice</p>
+            <p class="text-xs text-center">Sequence<br />of 4 dice</p>
           </div>
         </TableData>
         <TableData>30 Points</TableData>
@@ -249,7 +285,7 @@
         <TableData>
           <div class="flex justify-between">
             <p>Large Straight</p>
-            <p class="text-xs text-center">Sequence<br>of 5 dice</p>
+            <p class="text-xs text-center">Sequence<br />of 5 dice</p>
           </div>
         </TableData>
         <TableData>40 Points</TableData>
@@ -263,7 +299,7 @@
         <TableData>
           <div class="flex justify-between">
             <p>Yahtzee</p>
-            <p class="text-xs text-center">5 of a<br>kind</p>
+            <p class="text-xs text-center">5 of a<br />kind</p>
           </div>
         </TableData>
         <TableData>50 Points</TableData>
@@ -286,7 +322,7 @@
         <TableData colspan="2">
           <div class="flex justify-between">
             <p>Total Points of Part Two</p>
-            <i class='fas fa-arrow-right' style="font-size:24px"></i>
+            <i class="fas fa-arrow-right" style="font-size: 24px"></i>
           </div>
         </TableData>
         <TableData>{{ bottomScore }}</TableData>
@@ -299,7 +335,7 @@
         <TableData colspan="2">
           <div class="flex justify-between">
             <p>Total Points of Part One</p>
-            <i class='fas fa-arrow-right' style="font-size:24px"></i>
+            <i class="fas fa-arrow-right" style="font-size: 24px"></i>
           </div>
         </TableData>
         <TableData>{{ numScoreTotal + bonusScore }}</TableData>
@@ -312,10 +348,10 @@
         <TableData colspan="2">
           <div class="flex justify-between">
             <p class="font-bold">Total Score</p>
-            <i class='fas fa-arrow-right' style="font-size:24px"></i>
+            <i class="fas fa-arrow-right" style="font-size: 24px"></i>
           </div>
         </TableData>
-        <TableData>{{ numScoreTotal + bonusScore + bottomScore}}</TableData>
+        <TableData>{{ numScoreTotal + bonusScore + bottomScore }}</TableData>
         <TableData></TableData>
         <TableData></TableData>
         <TableData></TableData>
