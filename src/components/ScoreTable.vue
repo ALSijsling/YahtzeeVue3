@@ -7,8 +7,7 @@ import TableRowSpan from "./TableRowSpan.vue";
 
 const props = defineProps(["thrownDices"]);
 
-// TODO: props hoeven niet in een computed property?
-const dices = computed(() => props.thrownDices);
+const dices = ref(props.thrownDices);
 
 const count = computed(() => {
   let countObj = {
@@ -28,17 +27,9 @@ const count = computed(() => {
 });
 
 const countDuplicates = (num) => {
-  // TODO: deze functie kan korter. Refactor naar kortere functie. Hint: maak gebruik van
-  // Object.values()
-  if (
-    count.value[1] == num ||
-    count.value[2] == num ||
-    count.value[3] == num ||
-    count.value[4] == num ||
-    count.value[5] == num ||
-    count.value[6] == num
-  )
-    return true;
+  let dice = Object.values(count.value)
+  if(dice.includes(num))
+  return true
 };
 
 const numScoreTotal = computed(() =>
@@ -46,9 +37,6 @@ const numScoreTotal = computed(() =>
 );
 const bonusScore = computed(() => (numScoreTotal.value > 63 ? 35 : 0));
 
-// TODO: extra opdracht voor als je nog zin hebt: zet alle losse score-computed properties in 1 object
-// als losse object properties, en maak dit ene object als computed property, voor een betere organisatie
-// van je code. Dus: scores.chance, ipv change...
 const bottomScore = computed(
   () =>
     chance.value +

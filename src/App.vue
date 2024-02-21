@@ -17,8 +17,6 @@ const dices = (die) => {
     <h1 class="text-5xl font-bold text-center text-sky-800">{{ header }}</h1>
   </div>
 
-  <!-- TODO: uitzoeken hoe je dit met een v-model kunt oplossen (het doorgeven van dices),
-  zodat je zonder de dices functie toe kunt -->
   <ThrownDices @thrown-dices="dices" />
 
   <ScoreTable :thrown-dices="thrownDices" />
